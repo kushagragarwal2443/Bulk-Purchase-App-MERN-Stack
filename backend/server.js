@@ -44,6 +44,14 @@ userRoutes.route('/add').post(function(req, res) {
         });
 });
 
+//Adding login feature
+userRoutes.route('/login').post(function(req, res) {
+    let user = req.body;
+    User.find({username: `${user.username}`, password: `${user.password}`}, function(err, users){
+        return res.json(users);    
+    });
+});
+
 // Getting a user by id
 userRoutes.route('/:id').get(function(req, res) {
     let id = req.params.id;

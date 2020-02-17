@@ -1,22 +1,18 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 
-export default class CreateUser extends Component {
+export default class Login extends Component {
     
     constructor(props) {
         super(props);
 
         this.state = {
             username: '',
-            email: '',
-            password: '',
-            type: ''
+            password: ''
         }
 
         this.onChangeUsername = this.onChangeUsername.bind(this);
-        this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
-        this.onChangeType = this.onChangeType.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
     
@@ -24,36 +20,52 @@ export default class CreateUser extends Component {
         this.setState({ username: event.target.value });
     }
 
-    onChangeEmail(event) {
-        this.setState({ email: event.target.value });
-    }
-
     onChangePassword(event) {
         this.setState({ password: event.target.value });
     }
-
-    onChangeType(event) {
-        this.setState({ type: event.target.value });
-    }
-
     onSubmit(e) {
         e.preventDefault();
 
-        const newUser = {
+        const loginUser = {
             username: this.state.username,
-            email: this.state.email,
-            password: this.state.password,
-            type: this.state.type
+            password: this.state.password
         }
 
-        axios.post('http://localhost:4000/add', newUser)
-             .then(res => console.log(res.data));
+        axios.post('http://localhost:4000/login', loginUser)
+             .then(res => {
+                 if(Object.entries(res.data).length === 1)
+                 {
+                     if(res.data[0].type === "Customer")
+                     {
+                         this.props.history.push
+                         (
+                             {
+                                 pathname: '/customer'
+                             }
+                         )
+                     }
+                     else if(res.data[0].type === "Vendor")
+                     {
+                         this.props.history.push(
+                             {
+                                 pathname: '/vendor'
+                             }
+                         )
+                     }
+                     else{
+
+                        this.props.history.push(
+                            {
+                                pathname: '/login'
+                            }
+                        )
+                     }
+                 }        
+            });
 
         this.setState({
             username: '',
-            email: '',
-            password: '',
-            type: ''
+            password: ''
         });
     }
 
@@ -70,14 +82,6 @@ export default class CreateUser extends Component {
                                />
                     </div>
                     <div className="form-group">
-                        <label>Email: </label>
-                        <input type="text" 
-                               className="form-control" 
-                               value={this.state.email}
-                               onChange={this.onChangeEmail}
-                               />  
-                    </div>
-                    <div className="form-group">
                         <label>Password: </label>
                         <input type="text" 
                                className="form-control" 
@@ -86,15 +90,7 @@ export default class CreateUser extends Component {
                                />  
                     </div>
                     <div className="form-group">
-                        <label>Type: </label>
-                        <input type="text" 
-                               className="form-control" 
-                               value={this.state.type}
-                               onChange={this.onChangeType}
-                               />  
-                    </div>
-                    <div className="form-group">
-                        <input type="submit" value="Create User" className="btn btn-primary"/>
+                        <input type="submit" value="Login" className="btn btn-primary"/>
                     </div>
                 </form>
             </div>

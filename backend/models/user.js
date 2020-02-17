@@ -6,6 +6,14 @@ let User = new mongoose.Schema({
     },
     email: {
         type: String
+    },
+
+    password: {
+        type: String
+    },
+
+    type: {
+        type: String
     }
 });
 
