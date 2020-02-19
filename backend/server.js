@@ -60,6 +60,89 @@ userRoutes.route('/:id').get(function(req, res) {
     });
 });
 
+
+//Adding features for the second database, i.e, Product
+
+let Product = require('./models/product');
+
+
+// Add Product
+userRoutes.route('/vendor/add').post(function(req, res) {
+    let product = new Product(req.body);
+    console.log(req.body)
+    product.save()
+        .then(user => {
+            res.status(200).json({'Product': 'Product added'});
+        })
+        .catch(err => {
+            res.status(400).send('Error');
+        });
+});
+
+// Get products
+userRoutes.route('/vendor/product').post(function(req, res) {
+    let product=req.body
+    Product.find({username: `${product.username}`, quantity: {$ne: `${product.quantity}`}, status: `${product.status}`  },function(err, products) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(products);
+        }
+    });
+});
+
+// List of Dispatch products
+userRoutes.route('/vendor/dispatch').post(function(req, res) {
+    let product=req.body
+    Product.find({username: `${product.username}`, quantity: {$ne: `${product.quantity}`}, status: `${product.status}` },function(err, products) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(products);
+        }
+    });
+});
+
+// List of Dispatched products
+userRoutes.route('/vendor/dispatched').post(function(req, res) {
+    let product=req.body
+    Product.find({username: `${product.username}`, quantity: {$ne: `${product.quantity}`}, status: `${product.status}` },function(err, products) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(products);
+        }
+    });
+});
+
+// Cancelling product
+userRoutes.route('/vendor/product_cancel').post(function(req, res) {
+    let product=req.body
+    Product.updateOne({username: `${product.username}`, quantity: {$ne: `${product.quantity}`}, status: `${product.status}` }, { $set: {status: "Cancelled"} } ,function(err, products) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(products);
+        }
+    });
+});
+
+// Dispatching product
+userRoutes.route('/vendor/dispatch_disp').post(function(req, res) {
+    let product=req.body
+    Product.updateOne({username: `${product.username}`, quantity: {$ne: `${product.quantity}`}, status: `${product.status}`}, { $set: {status: "Dispatched"} } ,function(err, products) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(products);
+        }
+    });
+});
+
+
+
+//I do not understand this
+
 app.use('/', userRoutes);
 
 app.listen(PORT, function() {

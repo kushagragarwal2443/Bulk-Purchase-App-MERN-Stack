@@ -40,7 +40,7 @@ export default class Login extends Component {
                          this.props.history.push
                          (
                              {
-                                 pathname: '/customer'
+                                 pathname: 'customer/' + res.data[0].username
                              }
                          )
                      }
@@ -48,7 +48,7 @@ export default class Login extends Component {
                      {
                          this.props.history.push(
                              {
-                                 pathname: '/vendor'
+                                 pathname: 'vendor/' + res.data[0].username
                              }
                          )
                      }
