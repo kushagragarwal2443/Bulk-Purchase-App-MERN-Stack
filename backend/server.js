@@ -66,23 +66,25 @@ userRoutes.route('/:id').get(function(req, res) {
 let Product = require('./models/product');
 
 
-// Add Product
+// Adding a new Product
 userRoutes.route('/vendor/add').post(function(req, res) {
     let product = new Product(req.body);
     console.log(req.body)
     product.save()
         .then(user => {
-            res.status(200).json({'Product': 'Product added'});
+            res.status(200).json({'Product': 'Product added successfully'});
         })
         .catch(err => {
             res.status(400).send('Error');
         });
 });
 
-// Get products
+// Getting all the products
 userRoutes.route('/vendor/product').post(function(req, res) {
     let product=req.body
-    Product.find({username: `${product.username}`, quantity: {$ne: `${product.quantity}`}, status: `${product.status}`  },function(err, products) {
+    // console.log("prod")
+    // console.log(req.body)
+    Product.find({username: `${product.username}`, status: `${product.status}` , quantity: {$ne: `${product.quantity}` } },function(err, products) {
         if (err) {
             console.log(err);
         } else {
@@ -91,10 +93,12 @@ userRoutes.route('/vendor/product').post(function(req, res) {
     });
 });
 
-// List of Dispatch products
+// Getting all the products ready to dispatch
 userRoutes.route('/vendor/dispatch').post(function(req, res) {
     let product=req.body
-    Product.find({username: `${product.username}`, quantity: {$ne: `${product.quantity}`}, status: `${product.status}` },function(err, products) {
+    console.log("prod")
+    console.log(req.body)
+    Product.find({username: `${product.username}`, status: `${product.status}` , quantity: `${product.quantity}` },function(err, products) {
         if (err) {
             console.log(err);
         } else {
@@ -103,10 +107,12 @@ userRoutes.route('/vendor/dispatch').post(function(req, res) {
     });
 });
 
-// List of Dispatched products
+// Getting all the products dispatched
 userRoutes.route('/vendor/dispatched').post(function(req, res) {
     let product=req.body
-    Product.find({username: `${product.username}`, quantity: {$ne: `${product.quantity}`}, status: `${product.status}` },function(err, products) {
+    console.log("prod")
+    console.log(req.body)
+    Product.find({username: `${product.username}`, status: `${product.status}` , quantity: `${product.quantity}` },function(err, products) {
         if (err) {
             console.log(err);
         } else {
@@ -118,7 +124,9 @@ userRoutes.route('/vendor/dispatched').post(function(req, res) {
 // Cancelling product
 userRoutes.route('/vendor/product_cancel').post(function(req, res) {
     let product=req.body
-    Product.updateOne({username: `${product.username}`, quantity: {$ne: `${product.quantity}`}, status: `${product.status}` }, { $set: {status: "Cancelled"} } ,function(err, products) {
+    // console.log("prod")
+    // console.log(req.body)
+    Product.updateOne({username: `${product.username}`, status: `${product.status}` , quantity: {$ne: `${product.quantity}` } , name: `${product.name}` }, { $set: {status: "Cancelled"} } ,function(err, products) {
         if (err) {
             console.log(err);
         } else {
@@ -127,10 +135,12 @@ userRoutes.route('/vendor/product_cancel').post(function(req, res) {
     });
 });
 
-// Dispatching product
+// Cancelling product
 userRoutes.route('/vendor/dispatch_disp').post(function(req, res) {
     let product=req.body
-    Product.updateOne({username: `${product.username}`, quantity: {$ne: `${product.quantity}`}, status: `${product.status}`}, { $set: {status: "Dispatched"} } ,function(err, products) {
+    // console.log("prod")
+    // console.log(req.body)
+    Product.updateOne({username: `${product.username}`, status: `${product.status}` , quantity: `${product.quantity}` , name: `${product.name}` }, { $set: {status: "Dispatched"} } ,function(err, products) {
         if (err) {
             console.log(err);
         } else {
@@ -138,8 +148,6 @@ userRoutes.route('/vendor/dispatch_disp').post(function(req, res) {
         }
     });
 });
-
-
 
 //I do not understand this
 

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import {Button} from 'react-bootstrap';
 
 export default class Vendor extends Component {
     constructor(props) {
@@ -40,6 +42,7 @@ export default class Vendor extends Component {
                         })
     }
     render(){
+        const info ="kush"
         return (
             <div>
             <Button block disabled variant="secondary">Hello, Vendor {this.state.vendor} </Button>
