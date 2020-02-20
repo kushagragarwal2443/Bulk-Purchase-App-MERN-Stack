@@ -21,8 +21,8 @@ export default class UsersList extends Component {
     render() {
         return (
             <div>
-                <table className="table table-striped">
-                    <thead>
+                <table className="table table-striped table-hover">
+                    <thead className="thead-dark">
                         <tr>
                             <th>Username</th>
                             <th>Email</th>
@@ -32,13 +32,13 @@ export default class UsersList extends Component {
                     </thead>
                     <tbody>
                     { 
-                        this.state.users.map((currentUser, i) => {
+                        this.state.users.map((Userindex, i) => {
                             return (
                                 <tr>
-                                    <td>{currentUser.username}</td>
-                                    <td>{currentUser.email}</td>
-                                    <td>{currentUser.password}</td>
-                                    <td>{currentUser.type}</td>
+                                    <td>{Userindex.username}</td>
+                                    <td>{Userindex.email}</td>
+                                    <td>{Userindex.password}</td>
+                                    <td>{Userindex.type}</td>
                                 </tr>
                             )
                         })

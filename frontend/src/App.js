@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"
 
+//Importing all the Components
 import UsersList from './components/users-list.component'
 import CreateUser from './components/create-user.component'
 import Login from './components/login.component'
@@ -13,10 +14,18 @@ import Vendor_dispatch from './components/dispatch_vendor.component'
 import Vendor_dispatched from './components/dispatched_vendor.component'
 
 function App() {
+
+  //first we create the basic template on top of which other pages would modify
+  //then we define the path of various paths and render them appropriately using their component.js
+  
+  
   return (
     <Router>
+
       <div className="container">
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+
+
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <Link to="/" className="navbar-brand">App</Link>
           <div className="collapse navbar-collapse">
             <ul className="navbar-nav mr-auto">
@@ -44,6 +53,7 @@ function App() {
         <Route path="/vendor/dispatch/:id" component={Vendor_dispatch}/>
         <Route path="/vendor/dispatched/:id" component={Vendor_dispatched}/>
       </div>
+      
     </Router>
   );
 }

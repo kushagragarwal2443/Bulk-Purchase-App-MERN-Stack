@@ -33,34 +33,34 @@ export default class Login extends Component {
 
         axios.post('http://localhost:4000/login', loginUser)
              .then(res => {
-                 if(Object.entries(res.data).length === 1)
-                 {
-                     if(res.data[0].type === "Customer")
-                     {
-                         this.props.history.push
-                         (
-                             {
-                                 pathname: 'customer/' + res.data[0].username
-                             }
-                         )
-                     }
-                     else if(res.data[0].type === "Vendor")
-                     {
-                         this.props.history.push(
-                             {
-                                 pathname: 'vendor/' + res.data[0].username
-                             }
-                         )
-                     }
-                     else{
 
-                        this.props.history.push(
+                             
+                    if(res.data.type === "Customer")
+                    {
+                        this.props.history.push
+                        (
                             {
-                                pathname: '/login'
+                                pathname: 'customer/' + res.data.username
                             }
                         )
-                     }
-                 }        
+                    }
+                    else if(res.data.type === "Vendor")
+                    {
+                        this.props.history.push(
+                            {
+                                pathname: 'vendor/' + res.data.username
+                            }
+                        )
+                    }
+                    else{
+
+                    this.props.history.push(
+                        {
+                            pathname: '/login'
+                        }
+                    )
+                    }
+                        
             });
 
         this.setState({

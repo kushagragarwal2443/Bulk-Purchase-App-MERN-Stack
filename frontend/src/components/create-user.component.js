@@ -5,7 +5,6 @@ export default class CreateUser extends Component {
     
     constructor(props) {
         super(props);
-
         this.state = {
             username: '',
             email: '',
@@ -38,15 +37,14 @@ export default class CreateUser extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-
-        const newUser = {
+        const createdUser = {
             username: this.state.username,
             email: this.state.email,
             password: this.state.password,
             type: this.state.type
         }
 
-        axios.post('http://localhost:4000/add', newUser)
+        axios.post('http://localhost:4000/add', createdUser)
              .then(res => console.log(res.data));
 
         this.setState({
@@ -94,7 +92,7 @@ export default class CreateUser extends Component {
                                />  
                     </div>
                     <div className="form-group">
-                        <input type="submit" value="Create User" className="btn btn-primary"/>
+                        <input type="submit" value="Create User" className="btn btn-success"/>
                     </div>
                 </form>
             </div>

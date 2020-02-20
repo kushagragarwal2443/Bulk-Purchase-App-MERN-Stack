@@ -7,7 +7,9 @@ const app = express();
 const PORT = 4000;
 const userRoutes = express.Router();
 
-let User = require('./models/user');
+
+let User = require('./models/user');//database added 
+let bcrypt = require('bcrypt');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -45,12 +47,63 @@ userRoutes.route('/add').post(function(req, res) {
 });
 
 //Adding login feature
+
 userRoutes.route('/login').post(function(req, res) {
-    let user = req.body;
-    User.find({username: `${user.username}`, password: `${user.password}`}, function(err, users){
-        return res.json(users);    
+    // let user = req.body;
+    // console.log("hi")
+    User.findOne({username: req.body.username}).then(user => {
+        if(!user){
+            // console.log("hey")
+            res.status(400).send({"message": "User not found"});
+        }
+        else{
+            // console.log("I am there")
+            // console.log(req.body.password)
+            // console.log(user.password)
+            // console.log(req.body.password.localeCompare(user.password))
+            //bcrypt.compare(req.body.password, user.password, (err,result) => {
+            if(req.body.password == user.password)
+            {
+                // console.log("hi1")
+                // console.log(res.json(user))
+                return res.json(user);
+            }
+            else{
+                // console.log("hi2")
+                res.status(400).send({"message": "User log in not successful"});
+            }
+            //     console.log(result)
+            //     if(result) {
+            //         // if(err)
+            //         // {
+            //         //     console.log("I am there2")
+            //         //     res.status(400).send({"message":"User couldnt be logged in"})
+            //         // }
+            //         // else{
+            //         //     console.log("I am there3")
+            //         //     return res.json(user)
+            //         // }
+            //         user.save().then((user, err) => {
+            //             console.log("I am there2")
+            //             if(err) res.status(400).send({"message": "User could not be logged in"})
+            //             else {
+            //                 console.log("I am there3")
+            //                 return res.json(user);
+            //             }
+            //         })
+            //     }
+            //     else{
+            //         console.log("I am there4")
+            //         res.status(201).send('Wrong Password');
+            //     }
+
+
+            // })
+        }
+
     });
 });
+
 
 // Getting a user by id
 userRoutes.route('/:id').get(function(req, res) {
@@ -149,8 +202,7 @@ userRoutes.route('/vendor/dispatch_disp').post(function(req, res) {
     });
 });
 
-//I do not understand this
-
+//app is an instance of express and we use userRoutes
 app.use('/', userRoutes);
 
 app.listen(PORT, function() {
