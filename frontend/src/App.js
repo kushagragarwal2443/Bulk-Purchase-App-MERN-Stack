@@ -3,15 +3,16 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"
 
 //Importing all the Components
-import UsersList from './components/users-list.component'
-import CreateUser from './components/create-user.component'
-import Login from './components/login.component'
+import UsersList from './components/userslist.component'
+import CreateUser from './components/createuser.component'
 import Vendor from './components/vendor.component'
+import Login from './components/login.component'
+import AddProduct from './components/addproduct.component'
 import Customer from './components/customer.component'
-import Vendor_add from './components/add_vendor.component'
-import Vendor_product from './components/product_vendor.component'
-import Vendor_dispatch from './components/dispatch_vendor.component'
-import Vendor_dispatched from './components/dispatched_vendor.component'
+import DispatchableProduct from './components/dispatchableproduct.component'
+import ProductsList from './components/productslist.component'
+import DispatchedProduct from './components/dispatchedproduct.component'
+
 
 function App() {
 
@@ -21,10 +22,7 @@ function App() {
   
   return (
     <Router>
-
       <div className="container">
-
-
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <Link to="/" className="navbar-brand">App</Link>
           <div className="collapse navbar-collapse">
@@ -41,19 +39,19 @@ function App() {
             </ul>
           </div>
         </nav>
-
         <br/>
         <Route path="/" exact component={UsersList}/>
         <Route path="/create" component={CreateUser}/>
-        <Route path="/login" component={Login}/>
         <Route path="/vendor/:id" component={Vendor}/>
+        <Route path="/vendor/dispatched/:id" component={DispatchedProduct}/>
+        <Route path="/login" component={Login}/>
+        <Route path="/vendor/add/:id" component={AddProduct}/>
         <Route path="/customer/:id" component={Customer}/>
-        <Route path="/vendor/add/:id" component={Vendor_add}/>
-        <Route path="/vendor/product/:id" component={Vendor_product}/>
-        <Route path="/vendor/dispatch/:id" component={Vendor_dispatch}/>
-        <Route path="/vendor/dispatched/:id" component={Vendor_dispatched}/>
-      </div>
-      
+        <Route path="/vendor/dispatch/:id" component={DispatchableProduct}/>
+        <Route path="/vendor/product/:id" component={ProductsList}/>
+        
+        
+      </div>      
     </Router>
   );
 }

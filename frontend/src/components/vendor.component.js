@@ -3,11 +3,14 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 export default class Vendor extends Component {
     constructor(props) {
         super(props);
+        //using parent class' variables in the child class
         this.state = {
+            //the id of vendor is received as parameter while this page is rendered
             vendor: this.props.match.params.id            
         }
     }
 
+    //onchange functions defined now
     productlist(e){
         this.props.history.push
                         ({

@@ -33,34 +33,32 @@ export default class Login extends Component {
 
         axios.post('http://localhost:4000/login', loginUser)
              .then(res => {
-
-                             
+                 //entered the login page                             
                     if(res.data.type === "Customer")
                     {
-                        this.props.history.push
-                        (
-                            {
-                                pathname: 'customer/' + res.data.username
-                            }
-                        )
+                        console.log("The logged in user is Customer")
+                        this.props.history.push({                            
+                            //i redirect to a new page with the given address
+                            pathname: 'customer/' + res.data.username
+                        })
                     }
                     else if(res.data.type === "Vendor")
                     {
-                        this.props.history.push(
-                            {
-                                pathname: 'vendor/' + res.data.username
-                            }
-                        )
+                        console.log("The logged in user is Vendor")
+                        this.props.history.push({
+                            //i redirect to a new page with the given address
+                            pathname: 'vendor/' + res.data.username
+                        })
                     }
                     else{
-
+                        console.log("The user is neither a Vendor nor a Customer hence no login")
                     this.props.history.push(
                         {
+                            //redirecting the user back to the login page for login reattempt
                             pathname: '/login'
-                        }
-                    )
+                        })
                     }
-                        
+
             });
 
         this.setState({

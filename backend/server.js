@@ -9,7 +9,6 @@ const userRoutes = express.Router();
 
 
 let User = require('./models/user');//database added 
-let bcrypt = require('bcrypt');
 
 app.use(cors());
 app.use(bodyParser.json());

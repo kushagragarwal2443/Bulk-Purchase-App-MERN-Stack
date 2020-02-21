@@ -6,7 +6,7 @@ export default class Customer extends Component {
     render(){
         return (
             <div>
-            <p>Hello Customer</p>
+            <p class="p-2 text-warning bg-dark">Hello Customer </p>
             </div>
         )
     }
