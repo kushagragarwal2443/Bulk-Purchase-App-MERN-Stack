@@ -4,7 +4,8 @@ let User = new mongoose.Schema({
     username: {
         type: String
     },
-    email: {
+    
+    type: {
         type: String
     },
 
@@ -12,7 +13,7 @@ let User = new mongoose.Schema({
         type: String
     },
 
-    type: {
+    email: {
         type: String
     }
 });

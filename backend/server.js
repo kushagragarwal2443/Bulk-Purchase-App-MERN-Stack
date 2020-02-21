@@ -14,34 +14,43 @@ let bcrypt = require('bcrypt');
 app.use(cors());
 app.use(bodyParser.json());
 
-// Connection to mongodb
 mongoose.connect('mongodb://127.0.0.1:27017/users', { useNewUrlParser: true });
 const connection = mongoose.connection;
+//Connection created with MongoDB
 connection.once('open', function() {
-    console.log("MongoDB database connection established succesfully.");
+    console.log("MongoDB connected");
 })
 
-// API endpoints
-
-// Getting all the users
-userRoutes.route('/').get(function(req, res) {
-    User.find(function(err, users) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.json(users);
+//Users List Rendered
+userRoutes.route('/').get((req, res) => {
+    console.log("Printing Users List")
+    User.find(
+        (err, userslist) => {
+        if(err)
+        {
+            res.status(400).send({"message": "Error"});
+            console.log("Error in users list")
+        }
+        else
+        {
+            console.log("Users list successfully returned")
+            res.json(userslist);
         }
     });
 });
 
 // Adding a new user
-userRoutes.route('/add').post(function(req, res) {
+userRoutes.route('/add').post((req, res) => {
     let user = new User(req.body);
+    console.log(user)
     user.save()
+    //user saved in the database
         .then(user => {
+            console.log("User added successfully")
             res.status(200).json({'User': 'User added successfully'});
         })
         .catch(err => {
+            console.log("User addition has Error")
             res.status(400).send('Error');
         });
 });
@@ -119,88 +128,138 @@ userRoutes.route('/:id').get(function(req, res) {
 let Product = require('./models/product');
 
 
-// Adding a new Product
-userRoutes.route('/vendor/add').post(function(req, res) {
-    let product = new Product(req.body);
-    console.log(req.body)
-    product.save()
-        .then(user => {
-            res.status(200).json({'Product': 'Product added successfully'});
-        })
-        .catch(err => {
-            res.status(400).send('Error');
-        });
-});
-
-// Getting all the products
-userRoutes.route('/vendor/product').post(function(req, res) {
-    let product=req.body
-    // console.log("prod")
-    // console.log(req.body)
-    Product.find({username: `${product.username}`, status: `${product.status}` , quantity: {$ne: `${product.quantity}` } },function(err, products) {
+//Render the Products list
+userRoutes.route('/vendor/product').post((req, res) => {
+    console.log("I am printing products list")
+    Product.find({
+        username: req.body.username, 
+        quantity: {$ne: 0 }, 
+        status: req.body.status},
+        (err, productslist) => {
+        console.log(productslist)
         if (err) {
-            console.log(err);
-        } else {
-            res.json(products);
+            console.log("Error in product list")
+            res.status(400).send({"message": "Error"});
+        }
+        else {
+            console.log("Products list successfully returned")
+            res.json(productslist);
         }
     });
 });
 
+// New Product Addition
+userRoutes.route('/vendor/add').post((req, res) => {
+    let newproduct = new Product(req.body);
+    newproduct.save()
+    console.log("Saved Product")
+        .catch(err => {
+            console.log("Error")
+            res.status(400).send({"message": "Error"});
+        })
+        console.log("I am in product addition")
+        .then(user => {
+            console.log("Added product")
+            res.status(200).send({"message": "Added"});
+        });
+});
+
+
+
 // Getting all the products ready to dispatch
-userRoutes.route('/vendor/dispatch').post(function(req, res) {
-    let product=req.body
-    console.log("prod")
-    console.log(req.body)
-    Product.find({username: `${product.username}`, status: `${product.status}` , quantity: `${product.quantity}` },function(err, products) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.json(products);
+userRoutes.route('/vendor/dispatch').post((req, res) => {
+    console.log("I am printing dispatching products list")
+    Product.find({
+        username: req.body.username,
+        quantity: {$eq: 0},
+        status: req.body.status},        
+        (err, dispatchproducts) => {
+        if(err)
+        {
+            console.log("Error in dispatch product list")
+            res.status(400).send({"message": "Error"});
+        }
+        else
+        {
+            console.log("Dispatch Products list successfully returned")
+            res.json(dispatchproducts);
         }
     });
 });
 
 // Getting all the products dispatched
-userRoutes.route('/vendor/dispatched').post(function(req, res) {
-    let product=req.body
-    console.log("prod")
-    console.log(req.body)
-    Product.find({username: `${product.username}`, status: `${product.status}` , quantity: `${product.quantity}` },function(err, products) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.json(products);
+userRoutes.route('/vendor/dispatched').post((req, res) => {
+    console.log("I am printing dispatched products list")
+    Product.find({
+        username: req.body.username,
+        quantity: {$eq: 0},
+        status: req.body.status}, 
+        (err, dispatchedproducts) => {
+        if(err)
+        {
+            res.status(400).send({"message": "Error"});
+            console.log("Error in dispatched product list")
+        }
+        else
+        {
+            console.log("Dispatched Products list successfully returned")
+            res.json(dispatchedproducts);
         }
     });
 });
 
-// Cancelling product
-userRoutes.route('/vendor/product_cancel').post(function(req, res) {
-    let product=req.body
-    // console.log("prod")
-    // console.log(req.body)
-    Product.updateOne({username: `${product.username}`, status: `${product.status}` , quantity: {$ne: `${product.quantity}` } , name: `${product.name}` }, { $set: {status: "Cancelled"} } ,function(err, products) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.json(products);
+//Product being dispatched
+userRoutes.route('/vendor/dispatch_disp').post((req, res) => {
+    console.log("Dispatching")
+    Product.updateOne({
+        //finding the product
+        username: req.body.username,
+        name: req.body.name,
+        quantity: {$eq: 0},
+        //as in the dispatch list all products will have 0 quantity left
+        status: req.body.status },
+        {$set: {status: "Dispatched"} },
+        //this moves the product from dispatch to dispatched list
+        (err, dispatchingproducts) => {
+        if(err)
+        {
+            res.status(400).send({"message": "Error"});
+            console.log("Error in dispatching")
+        }
+        else
+        {
+            console.log("Dispatching successful")
+            res.json(dispatchingproducts);
         }
     });
 });
 
-// Cancelling product
-userRoutes.route('/vendor/dispatch_disp').post(function(req, res) {
-    let product=req.body
-    // console.log("prod")
-    // console.log(req.body)
-    Product.updateOne({username: `${product.username}`, status: `${product.status}` , quantity: `${product.quantity}` , name: `${product.name}` }, { $set: {status: "Dispatched"} } ,function(err, products) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.json(products);
+//Cancel Product
+userRoutes.route('/vendor/product_cancel').post((req, res) => {
+    console.log("Cancelling")
+    Product.updateOne({
+        //searching for the product
+        username: req.body.username,
+        name: req.body.name,
+        quantity: {$ne: 0},
+        //as the products in the available product list will have non zero quantities
+        status: req.body.status },
+        {$set: {status: "Cancelled"} },
+        (err, cancellingproducts) => {
+        if(err)
+        {
+            res.status(400).send({"message": "Error"});
+            console.log("Error in cancelling")
+        }
+        else
+        {
+            console.log("Cancelling successful")
+            res.json(cancellingproducts);
         }
     });
 });
+
+
 
 //app is an instance of express and we use userRoutes
 app.use('/', userRoutes);
